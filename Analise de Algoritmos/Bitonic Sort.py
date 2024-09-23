@@ -1,42 +1,33 @@
-def compare_and_swap(arr, i, j, direction):
-    """
-    Compara e troca os elementos se não estiverem na ordem desejada.
-    'direction' define se é ordem crescente (True) ou decrescente (False).
-    """
-    if direction == (arr[i] > arr[j]):
-        arr[i], arr[j] = arr[j], arr[i]
+def compAndSwap(a, i, j, dire):
+    if (dire == 1 and a[i] > a[j]) or (dire == 0 and a[i] < a[j]):
+        a[i], a[j] = a[j], a[i]
 
-def bitonic_merge(arr, low, cnt, direction):
-    """
-    Mescla uma sequência bitônica no array.
-    """
+def bitonicMerge(a, low, cnt, dire):
     if cnt > 1:
-        mid = cnt // 2
-        for i in range(low, low + mid):
-            compare_and_swap(arr, i, i + mid, direction)
-        print(f"Após mesclagem: {arr}")  # Imprime o vetor após mesclagem
-        bitonic_merge(arr, low, mid, direction)
-        bitonic_merge(arr, low + mid, mid, direction)
+        k = cnt // 2
+        for i in range(low, low + k):
+            compAndSwap(a, i, i + k, dire)
+        bitonicMerge(a, low, k, dire)
+        bitonicMerge(a, low + k, k, dire)
 
-def bitonic_sort_recursive(arr, low, cnt, direction):
-    """
-    Função recursiva para dividir o array em sequências bitônicas.
-    """
+def bitonicSort(a, low, cnt, dire):
     if cnt > 1:
-        mid = cnt // 2
-        bitonic_sort_recursive(arr, low, mid, True)  # Primeira metade em ordem crescente
-        bitonic_sort_recursive(arr, low + mid, mid, False)  # Segunda metade em ordem decrescente
-        bitonic_merge(arr, low, cnt, direction)  # Mescla as duas sequências
-        print(f"Após chamada de bitonic_merge em {low}, {cnt}: {arr}")
+        k = cnt // 2
+        bitonicSort(a, low, k, 1)  # Ordena a primeira metade em ordem crescente
+        bitonicSort(a, low + k, k, 0)  # Ordena a segunda metade em ordem decrescente
+        bitonicMerge(a, low, cnt, dire)
+        print(f"Após chamada de bitonicMerge em {low}, {cnt}: {a}")  # Imprime após mesclagem
 
-def bitonic_sort(arr):
-    """
-    Função principal que chama a recursiva e imprime o estado em cada refinamento.
-    """
-    print(f"Vetor inicial: {arr}")
-    bitonic_sort_recursive(arr, 0, len(arr), True)
-    print(f"Vetor ordenado: {arr}")
+def sort(a, N, up):
+    bitonicSort(a, 0, N, up)
 
-# Exemplo
-arr = [3, 7, 4, 8, 6, 2, 10, 5, 9, 1]
-bitonic_sort(arr)
+# Código para testar a função
+a = [3, 7, 4, 8, 6, 2, 1, 5, 10, 9, 12, 11, 16, 15, 14, 13]
+n = len(a)
+up = 1
+
+print("Vetor inicial:")
+print(a)
+sort(a, n, up)
+print("\nVetor ordenado:")
+print(a)
