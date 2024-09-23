@@ -1,0 +1,247 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+def create_graph():
+    directed = input("O grafo é direcionado? (S/N): ").upper()
+    directed = directed == 'S'
+    weighted = input("O grafo é valorado? (S/N): ").upper()
+    weighted = weighted == 'S'
+
+    if directed:
+        G = nx.DiGraph()
+    else:
+        G = nx.Graph()
+
+    return G, weighted, directed
+
+def insert_batch_info(filename, graph, vertices, weighted):
+    """
+    Function to insert batch information (vertices and edges) from a file.
+    """
+    try:
+        with open(filename, 'r') as file:
+            for line in file:
+                line_info = line.strip().split()
+                if weighted:
+                    # Espera a entrada no formato: vertice1 vertice2 peso
+                    if len(line_info) != 3:
+                        print("Número insuficiente de elementos na linha. Certifique-se de que cada linha tenha dois vértices e um peso.")
+                        continue
+                    v1, v2, weight = line_info
+                    weight = float(weight)
+                else:
+                    # Espera a entrada no formato: vertice1 vertice2
+                    if len(line_info) != 2:
+                        print("Número insuficiente de elementos na linha. Certifique-se de que cada linha tenha dois vértices.")
+                        continue
+                    v1, v2 = line_info
+
+                if v1 not in vertices:
+                    vertices.add(v1)
+                    graph.add_node(v1)
+                if v2 not in vertices:
+                    vertices.add(v2)
+                    graph.add_node(v2)
+
+                if weighted:
+                    graph.add_edge(v1, v2, weight=weight)
+                else:
+                    graph.add_edge(v1, v2)
+
+        print("Informações em lote do arquivo inseridas com sucesso!")
+    except FileNotFoundError:
+        print("Arquivo não encontrado!")
+
+def insert_batch_items(G, weighted):
+    vertices_input = input("Digite os vértices separados por espaço: ").split()
+    G.add_nodes_from(vertices_input)
+
+    edges_input = input("Digite as arestas separadas por espaço: ").split()
+    i = 0
+    while i < len(edges_input):
+        u = edges_input[i]
+        v = edges_input[i + 1]
+        if weighted and i + 2 < len(edges_input) and edges_input[i + 2].isdigit():
+            weight = float(edges_input[i + 2])
+            G.add_edge(u, v, weight=weight)
+            i += 3
+        else:
+            G.add_edge(u, v)
+            i += 2
+
+def create_graph_from_file(filename):
+    """
+    Function to create and manage a graph using NetworkX library.
+
+    Provides an interactive menu for adding vertices, edges, viewing the graph, and exiting.
+    """
+
+    print("Bem-vindo ao Criador de Grafos!")
+
+    graph, weighted, directed = create_graph()  # Chama a função para criar o grafo
+
+    vertices = set()
+    edges = []
+
+    insert_batch_info(filename, graph, vertices, weighted)  # Chama a função para inserir informações do arquivo
+
+    while True:
+        print("\nOpções:")
+        print("1. Adicionar vértice")
+        print("2. Adicionar aresta")
+        print("3. Inserir o nome do arquivo")
+        print("4. Inserir itens em lote")
+        print("5. Visualizar grafo")
+        print("6. Tamanho e ordem")
+        print("7. Verificar adjacência de vértice")
+        print("8. Verificar Grau do vértice")
+        print("9. Verificar adjacência de dois vértices")
+        print("10. Caminho mais curto entre 2 vértices")
+        print("11. Sair")
+
+        option = input("\nEscolha uma opção: ")
+
+        if option == '1':
+            vertex = input("Insira o nome do vértice: ")
+            if vertex in vertices:
+                print(f"Vértice '{vertex}' já existe.")
+            else:
+                vertices.add(vertex)
+                graph.add_node(vertex)
+                print(f"Vértice '{vertex}' adicionado com sucesso!")
+
+        elif option == '2':
+            if not vertices:
+                print("Não há vértices criados ainda!")
+                continue
+
+            print("Vértices disponíveis:", vertices)
+            start_vertex = input("Insira o nome do vértice de partida: ")
+            end_vertex = input("Insira o nome do vértice de chegada: ")
+
+            if start_vertex not in vertices or end_vertex not in vertices:
+                print("Vértice não encontrado!")
+                continue
+
+            edges.append((start_vertex, end_vertex))
+            if weighted:
+                weight = input("Insira o peso da aresta: ")
+                graph.add_edge(start_vertex, end_vertex, weight=float(weight))
+            else:
+                graph.add_edge(start_vertex, end_vertex)
+            print(f"Aresta adicionada entre '{start_vertex}' e '{end_vertex}'!")
+
+        elif option == '3':
+            filename = input("Insira o nome do arquivo: ")
+            insert_batch_info(filename, graph, vertices, weighted)  # Chama a função para inserir informações do arquivo
+
+        elif option == '4':
+            insert_batch_items(graph, weighted)
+
+        elif option == '5':
+            print("Visualizando grafo...")
+            print("Vértices:", graph.nodes)
+            print("Arestas:", graph.edges)
+            pos = nx.spring_layout(graph)  # Layout para visualização
+            nx.draw(graph, pos, with_labels=True, node_color='lightblue', edge_color='gray', node_size=500, font_size=10)
+            if weighted:
+                edge_labels = nx.get_edge_attributes(graph, 'weight')
+                nx.draw_networkx_edge_labels(graph, pos, edge_labels=edge_labels)
+            plt.show()
+
+        elif option == '6':  
+            order, size = get_graph_info(graph)
+            print(f"Ordem do grafo: {order}")
+            print(f"Tamanho do grafo: {size}")
+
+        elif option == "7":
+            vertex = input("Digite o nome do vértice: ")           
+            in_edges, out_edges = adj(graph, directed, vertex)
+            if directed:
+                in_str = ", ".join(in_edges)
+                out_str = ", ".join(out_edges)
+                print(f"Vértice de entrada: {in_str}")
+                print(f"Vértice de saída: {out_str}")
+            else:
+                adj_str = ", ".join(out_edges)
+                print(f"Vértices adjacentes: {adj_str}")
+        
+        elif option == "8":
+            vertex = input("Digite o nome do vértice: ")
+            message = vertex_degree(graph, directed, vertex)
+            print(message)
+        
+        elif option == '9':
+            vertex1 = input("Digite o nome do primeiro vértice: ")
+            vertex2 = input("Digite o nome do segundo vértice: ")
+            verify_adj(graph, vertex1, vertex2)
+            
+        elif option == '10':
+            vertex1 = input("Digite o nome do vértice de começo: ")
+            vertex2 = input("Digite o nome do vértice final: ")
+            length, path = shortest_path(graph, vertex1, vertex2)
+            if length is not None:
+                print(f"O menor caminho entre '{vertex1}' e '{vertex2}' é: {path} com custo total de {length}")
+            else:
+                print(path)
+
+        elif option == '11':
+            print("Encerrando o programa...")
+            break
+        
+def verify_adj(graph, vertex1, vertex2):
+    try:
+        if vertex1 in graph.neighbors(vertex2):
+            return print("São adjacentes")
+        else:
+            return print("Não são adjacentes")
+    except KeyError:
+        return "Não existe o vértice informado"
+
+def vertex_degree(graph, directed, vertex):
+    try:
+        message = ""
+        if directed:
+            in_edges, out_edges = adj(graph, directed, vertex)
+            message += f"\nO grau do vértice de entrada é: {len(in_edges)}"
+            message += f"\nO grau do vértice de saída é: {len(out_edges)}"
+        else:
+            degree = graph.degree[vertex]
+            if (vertex, vertex) in graph.edges:
+                degree -= 1
+            message = f"O grau do vértice é: {degree}" 
+        return message
+    except KeyError:
+        return "Não existe o vértice informado."
+           
+def get_graph_info(graph):
+    #calcula tamanho e ordem
+    order = len(graph.nodes)
+    size = len(graph.edges)
+    return order, size
+
+def adj(graph, directed, vertex):
+    in_edges = []
+    out_edges = []
+
+    if directed:
+        in_edges = [n for n in graph.predecessors(vertex)]
+        out_edges = [n for n in graph.successors(vertex)]
+    else:
+        neighbors = [n for n in graph.neighbors(vertex)]
+        out_edges = neighbors
+
+    return in_edges, out_edges
+
+def shortest_path(graph, vertex_start, vertex_end):
+    try:
+        length, path = nx.single_source_dijkstra(graph, vertex_start, vertex_end)
+        return length, path
+    except nx.NetworkXNoPath:
+        return None, "Não há caminho entre os vértices fornecidos."
+    except nx.NodeNotFound as e:
+        return None, str(e)
+
+if __name__ == "__main__":
+    filename = input("Vamos criar um Grafo (Pressione Enter): ")
+    create_graph_from_file(filename)
