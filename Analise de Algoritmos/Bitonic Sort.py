@@ -1,11 +1,12 @@
 def compAndSwap(a, i, j, dire):
     """
     Compara e troca os elementos em índices i e j do array a.
-    Se dire é 1, a troca acontece se a[i] > a[j] (ordem crescente).
-    Se dire é 0, a troca acontece se a[i] < a[j] (ordem decrescente).
+    Se dire = 1, a troca acontece se a[i] > a[j] (ordem crescente).
+    Se dire = 0, a troca acontece se a[i] < a[j] (ordem decrescente).
     """
     if (dire == 1 and a[i] > a[j]) or (dire == 0 and a[i] < a[j]):
-        a[i], a[j] = a[j], a[i]  # Realiza a troca
+        print(f"Troca entre a[{i}] = {a[i]} e a[{j}] = {a[j]}")
+        a[i], a[j] = a[j], a[i]
 
 def bitonicMerge(a, low, cnt, dire):
     """
@@ -43,8 +44,7 @@ def sort(a, N, up):
     """
     bitonicSort(a, 0, N, up)  # Inicia o processo de ordenação
 
-# Código para testar a função
-a = [3, 7, 4, 8, 6, 2, 1, 5, 10, 9, 12, 11, 16, 15, 14, 13]  # Array a ser ordenado
+a = [31, 20, 9, 11, 38, 2, 77, 19]  # Array a ser ordenado
 n = len(a)  # Número de elementos no array
 up = 1  # Indica que a ordenação será em ordem crescente
 
@@ -53,3 +53,5 @@ print(a)  # Imprime o array inicial
 sort(a, n, up)  # Chama a função de ordenação
 print("\nVetor ordenado:")
 print(a)  # Imprime o array após a ordenação
+
+#, 23, 4, 3, 2, 30, 7, 19, 28
