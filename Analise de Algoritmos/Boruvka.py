@@ -1,5 +1,5 @@
 from collections import defaultdict
- 
+
 # Classe para representar um grafo
 class Graph:
  
