@@ -93,6 +93,7 @@ class Graph:
         print("Peso total da MST é %d" % MSTweight)
                            
 # Exemplo de uso
+# Testando
 g = Graph(4)
 g.addEdge(0, 1, 10)
 g.addEdge(0, 2, 6)
