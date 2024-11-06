@@ -94,11 +94,24 @@ class Graph:
                            
 # Exemplo de uso
 # Testando
-g = Graph(4)
-g.addEdge(0, 1, 10)
-g.addEdge(0, 2, 6)
-g.addEdge(0, 3, 5)
-g.addEdge(1, 3, 15)
-g.addEdge(2, 3, 4)
- 
+g = Graph(6)
+g.addEdge(0, 1, 4)
+g.addEdge(0, 2, 3)
+g.addEdge(1, 2, 1)
+g.addEdge(1, 3, 2)
+g.addEdge(2, 3, 6)
+g.addEdge(3, 4, 10)
+g.addEdge(4, 5, 7)
+g.addEdge(3, 5, 8)
+g.addEdge(2, 5, 5)
+
 g.boruvkaMST()
+
+#g = Graph(4)
+#g.addEdge(0, 1, 10)
+#g.addEdge(0, 2, 6)
+#g.addEdge(0, 3, 5)
+#g.addEdge(1, 3, 15)
+#g.addEdge(2, 3, 4)
+ 
+#g.boruvkaMST()
