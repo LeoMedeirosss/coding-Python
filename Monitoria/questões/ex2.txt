@@ -1,0 +1,16 @@
+Crie um programa em Python que simule um menu interativo de uma conta bancária. 
+O programa deve começar com saldo 0 e exibir as seguintes opções ao usuário:
+1 - Depositar
+2 - Sacar
+3 - Ver saldo
+4 - Sair
+
+O programa deve repetir o menu até que o usuário escolha a opção 4 (Sair).
+Ao escolher 1, o usuário deve informar um valor positivo para depósito, que será adicionado ao saldo.
+
+Ao escolher 2, o usuário deve informar um valor para saque. 
+Se o valor for maior que o saldo, o saque não deve ser permitido e o programa deve exibir uma mensagem de erro.
+
+Ao escolher 3, o programa deve exibir o saldo atual.
+
+Ao escolher qualquer número fora de 1 a 4, o programa deve exibir "Opção inválida".

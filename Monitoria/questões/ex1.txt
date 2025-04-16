@@ -1,0 +1,21 @@
+Escreva um programa em Python que leia o nome e a nota de 5 alunos. Armazene os nomes em uma lista e as notas em outra lista,
+ nas mesmas posições (ou seja, o nome na posição i corresponde à nota na posição i da outra lista).
+Ao final, o programa deve:
+Exibir a média geral da turma.
+Exibir o nome dos alunos que ficaram acima da média da turma.
+
+
+Exemplo de exxecução
+Digite o nome do aluno 1: Ana  
+Digite a nota do aluno 1: 8.5  
+Digite o nome do aluno 2: Bruno  
+Digite a nota do aluno 2: 6.0  
+Digite o nome do aluno 3: Carla  
+Digite a nota do aluno 3: 9.0  
+Digite o nome do aluno 4: Daniel  
+Digite a nota do aluno 4: 7.5  
+Digite o nome do aluno 5: Elisa  
+Digite a nota do aluno 5: 5.0  
+
+Média da turma: 7.2  
+Alunos acima da média: Ana, Carla, Daniel
